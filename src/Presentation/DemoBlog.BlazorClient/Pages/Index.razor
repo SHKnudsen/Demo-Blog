@@ -1,9 +1,87 @@
 ﻿@page "/"
+@using DemoBlog.BlazorClient.Services;
+@using static DemoBlog.BlazorClient.Shared.MainLayout;
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudStack Spacing="16" Elevation="4">
+    <MudPaper Outlined="false" Class="py-8 px-10" Style="@($"{Themes.Styles.Surface.Surface2(LayoutService.IsDarkMode)}; border-radius: 20px;")">
+        <MudText Align="Align.Center" Typo="Typo.h3" GutterBottom="true">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TITLE</MudText>
+        <MudText Align="Align.Center">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TEXT</MudText>
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem xs="3">
+                    <MudCard Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+                        <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
+                        <MudCardContent>
+                            <MudText>Story of the day 1</MudText>
+                            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+                <MudItem xs="3">
+                    <MudCard Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+                        <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
+                        <MudCardContent>
+                            <MudText>Story of the day 2</MudText>
+                            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+                <MudItem xs="3">
+                    <MudCard Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+                        <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
+                        <MudCardContent>
+                            <MudText>Story of the day 3</MudText>
+                            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+                <MudItem xs="3">
+                    <MudCard Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+                        <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
+                        <MudCardContent>
+                            <MudText>Story of the day 4</MudText>
+                            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudPaper>
 
-Welcome to your new app.
+</MudStack>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    [Inject] private LayoutService LayoutService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        LayoutService.MajorUpdateOccured += LayoutServiceOnMajorUpdateOccured;
+        base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        LayoutService.MajorUpdateOccured -= LayoutServiceOnMajorUpdateOccured;
+    }
+
+    private void LayoutServiceOnMajorUpdateOccured(object? sender, EventArgs e)
+    {
+        StateHasChanged();
+    }
+}
+
+
