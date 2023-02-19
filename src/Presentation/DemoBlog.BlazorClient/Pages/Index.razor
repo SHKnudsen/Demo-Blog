@@ -1,17 +1,18 @@
 ﻿@page "/"
 @using DemoBlog.BlazorClient.Services;
-@using static DemoBlog.BlazorClient.Shared.MainLayout;
 
 <PageTitle>Index</PageTitle>
 
-<MudStack Spacing="16" Elevation="4">
-    <MudPaper Outlined="false" Class="py-8 px-10" Style="@($"{Themes.Styles.Surface.Surface2(LayoutService.IsDarkMode)}; border-radius: 20px;")">
-        <MudText Align="Align.Center" Typo="Typo.h3" GutterBottom="true">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TITLE</MudText>
-        <MudText Align="Align.Center">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TEXT</MudText>
-        <MudItem xs="12">
-            <MudGrid>
-                <MudItem xs="3">
-                    <MudCard Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+<MudPaper Outlined="false" Style="@($"{Themes.Styles.Surface.Surface2(LayoutService.IsDarkMode)}; border-radius: 20px;")">
+    <MudStack Spacing="16" Elevation="4" Style="padding: 60px;">
+        <MudItem>
+            <MudText Align="Align.Center" Typo="Typo.h3" GutterBottom="true">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TITLE</MudText>
+            <MudText Align="Align.Center">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TEXT</MudText>
+        </MudItem>
+        <MudItem>
+            <MudGrid Justify="Justify.Center">
+                <MudItem>
+                    <MudCard>
                         <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
                         <MudCardContent>
                             <MudText>Story of the day 1</MudText>
@@ -22,8 +23,8 @@
                         </MudCardActions>
                     </MudCard>
                 </MudItem>
-                <MudItem xs="3">
-                    <MudCard Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+                <MudItem>
+                    <MudCard>
                         <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
                         <MudCardContent>
                             <MudText>Story of the day 2</MudText>
@@ -34,8 +35,8 @@
                         </MudCardActions>
                     </MudCard>
                 </MudItem>
-                <MudItem xs="3">
-                    <MudCard Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+                <MudItem>
+                    <MudCard>
                         <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
                         <MudCardContent>
                             <MudText>Story of the day 3</MudText>
@@ -46,23 +47,11 @@
                         </MudCardActions>
                     </MudCard>
                 </MudItem>
-                <MudItem xs="3">
-                    <MudCard Class="d-flex flex-column align-center justify-center mud-width-full py-8">
-                        <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
-                        <MudCardContent>
-                            <MudText>Story of the day 4</MudText>
-                            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudItem>
             </MudGrid>
         </MudItem>
-    </MudPaper>
 
-</MudStack>
+    </MudStack>
+ </MudPaper>
 
 @code {
     [Inject] private LayoutService LayoutService { get; set; }

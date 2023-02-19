@@ -1,5 +1,6 @@
 ﻿@using DemoBlog.BlazorClient.Services;
 @using DemoBlog.BlazorClient.Themes;
+@using System.Diagnostics.CodeAnalysis;
 @inherits LayoutComponentBase
 
 <MudThemeProvider @ref="@_mudThemeProvider" Theme="@LayoutService.CurrentTheme" IsDarkMode="@LayoutService.IsDarkMode" IsDarkModeChanged="@LayoutService.SetDarkMode" />
@@ -24,16 +25,17 @@
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="my-8 pt-8">
+        <MudContainer MaxWidth="MaxWidth.Large" Style="padding: 24px" >
             @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>
 
 @code {
-
     [Inject] 
     private LayoutService LayoutService { get; set; }
+
+    [AllowNull]
     private MudThemeProvider _mudThemeProvider;
 
     private bool _drawerOpen;
