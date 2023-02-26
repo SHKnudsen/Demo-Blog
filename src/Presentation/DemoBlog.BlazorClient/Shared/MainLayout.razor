@@ -1,6 +1,7 @@
 ﻿@using DemoBlog.BlazorClient.Services;
 @using DemoBlog.BlazorClient.Themes;
 @using System.Diagnostics.CodeAnalysis;
+@using MudBlazor.Utilities;
 @inherits LayoutComponentBase
 
 <MudThemeProvider @ref="@_mudThemeProvider" Theme="@LayoutService.CurrentTheme" IsDarkMode="@LayoutService.IsDarkMode" IsDarkModeChanged="@LayoutService.SetDarkMode" />
@@ -11,7 +12,7 @@
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
-        <MudImage Src="images/logo-nobg.png" Alt="Mony the dog" Height="50" Elevation="25" Class="rounded-lg" />
+        <MudImage Src="images/logo-nobg.png" Alt="Mony the dog" Height="50" />
         <MudSpacer />
         <MudTooltip Duration="1000" Text="@(LayoutService.IsDarkMode ? "Switch to Light Theme" : "Switch to Dark Theme")">
             <MudIconButton Icon="@(LayoutService.IsDarkMode ? @Icons.Material.Rounded.LightMode : @Icons.Material.Outlined.DarkMode)" Color="Color.Inherit" OnClick="@LayoutService.ToggleDarkMode" />
@@ -25,7 +26,7 @@
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Style="padding: 24px" >
+        <MudContainer  MaxWidth="MaxWidth.ExtraLarge" Style="padding: 24px" >
             @Body
         </MudContainer>
     </MudMainContent>

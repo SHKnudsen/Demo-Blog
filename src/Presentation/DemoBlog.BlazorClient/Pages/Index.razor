@@ -1,60 +1,146 @@
 ﻿@page "/"
 @using DemoBlog.BlazorClient.Services;
+@using DemoBlog.Domain;
+@using MudBlazor.Utilities;
 
 <PageTitle>Index</PageTitle>
+<MudStack Spacing="7">
+    <MudPaper Outlined="false" Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface2}; border-radius: 20px")">
+        <MudStack Spacing="16" Elevation="1" Style="padding: 60px;">
+            <MudItem>
+                <MudText Align="Align.Center" Typo="Typo.h3" GutterBottom="true">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TITLE</MudText>
+                <MudText Align="Align.Center">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TEXT</MudText>
+            </MudItem>
+            <MudItem>
+                <MudGrid Justify="Justify.Center">
+                    <MudItem xs="4">
+                        <MudCard>
+                            <MudCardMedia Image="images/stock_card_food.jpg" Height="250" />
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h6">Story of the day 1</MudText>
+                                    <MudText Typo="Typo.subtitle1">Story of the day 1</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudText Typo="Typo.body1">The quick, brown fox jumps over a lazy dog.</MudText>
+                            </MudCardContent>
+                            <MudCardActions Class="justify-end gap-2">
+                                <MudButton Size="Size.Large" Color="Color.Primary" Variant="Variant.Text" Class="mud-elevation-1 hover:mud-primary-hover" Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; border-radius: 12px;")">View Post</MudButton>
+                                <MudToggleIconButton @bind-Toggled="@Starred"
+                                                     Size="Size.Medium"
+                                                     Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; width: 40px; border-radius: 12px;")"
+                                                     Class="mud-elevation-1"
+                                                     Variant="Variant.Text"
+                                                     Color="Color.Primary"
+                                                     Icon="@Icons.Material.Filled.StarBorder"
+                                                     ToggledIcon="@Icons.Material.Filled.Star" ToggledColor="Color.Primary" />
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudCard>
+                            <MudCardMedia Image="images/stock_card_food.jpg" Height="250" />
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h6">Story of the day 2</MudText>
+                                    <MudText Typo="Typo.subtitle1">Story of the day 2</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudText Typo="Typo.body1">The quick, brown fox jumps over a lazy dog.</MudText>
+                            </MudCardContent>
+                            <MudCardActions Class="justify-end gap-2">
+                                <MudButton Size="Size.Large" Color="Color.Primary" Variant="Variant.Text" Class="mud-elevation-1 hover:mud-primary-hover" Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; border-radius: 12px;")">View Post</MudButton>
+                                <MudToggleIconButton @bind-Toggled="@Starred"
+                                                     Size="Size.Medium"
+                                                     Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; width: 40px; border-radius: 12px;")"
+                                                     Class="mud-elevation-1"
+                                                     Variant="Variant.Text"
+                                                     Color="Color.Primary"
+                                                     Icon="@Icons.Material.Filled.StarBorder"
+                                                     ToggledIcon="@Icons.Material.Filled.Star" ToggledColor="Color.Primary" />
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudCard>
+                            <MudCardMedia Image="images/stock_card_food.jpg" Height="250" />
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h6">Story of the day 3</MudText>
+                                    <MudText Typo="Typo.subtitle1">Story of the day 3</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudText Typo="Typo.body1">The quick, brown fox jumps over a lazy dog.</MudText>
+                            </MudCardContent>
+                            <MudCardActions Class="justify-end gap-2">
+                                <MudButton Size="Size.Large" Color="Color.Primary" Variant="Variant.Text" Class="mud-elevation-1 hover:mud-primary-hover" Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; border-radius: 12px;")">View Post</MudButton>
+                                <MudToggleIconButton @bind-Toggled="@Starred"
+                                                     Size="Size.Medium"
+                                                     Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; width: 40px; border-radius: 12px;")"
+                                                     Class="mud-elevation-1"
+                                                     Variant="Variant.Text"
+                                                     Color="Color.Primary"
+                                                     Icon="@Icons.Material.Filled.StarBorder"
+                                                     ToggledIcon="@Icons.Material.Filled.Star" ToggledColor="Color.Primary" />
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudStack>
+    </MudPaper>
+    <MudPaper Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface5}; border-radius: 20px; padding: 60px;")">
+        <MudGrid Justify="Justify.Center" Style="padding-bottom: 28px">
+            <MudChipSet @bind-SelectedChips="SelectedFilterChips" MultiSelection="true">
+                <MudChip Icon="@Icons.Material.Filled.RestaurantMenu" Text="Food"></MudChip>
+                <MudChip Icon="@Icons.Material.Filled.LocalBar" Text="Cocktails"></MudChip>
+            </MudChipSet>
+        </MudGrid>
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="SearchText" Label="Find post" Variant="Variant.Filled" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudStack>
+                    <MudSelect @bind-SelectedValues="SelectedCuisines"
+                                Variant="Variant.Filled"
+                                MultiSelection="true"
+                                ToStringFunc="@CuisineConverter"
+                                Label="Select Cuisines"
+                                OpenIcon="@Icons.Material.Filled.Flag"
+                                AdornmentColor="Color.Secondary">
+                        @foreach (Cuisine item in Cuisines.GetAll())
+                        {
+                            <MudSelectItem Value="@item">
+                                <img src="@item.FlagSrc" height="14" class="mr-1" /> @item.Country
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudGrid Justify="Justify.Center">
+                        @foreach (Cuisine cuisine in SelectedCuisines)
+                        {
+                            <MudChip Value="@cuisine" Text="@cuisine.Country" Color="Color.Primary" OnClose="Closed"></MudChip>
+                        }
+                    </MudGrid>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudStack>
 
-<MudPaper Outlined="false" Style="@($"{Themes.Styles.Surface.Surface2(LayoutService.IsDarkMode)}; border-radius: 20px;")">
-    <MudStack Spacing="16" Elevation="4" Style="padding: 60px;">
-        <MudItem>
-            <MudText Align="Align.Center" Typo="Typo.h3" GutterBottom="true">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TITLE</MudText>
-            <MudText Align="Align.Center">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TEXT</MudText>
-        </MudItem>
-        <MudItem>
-            <MudGrid Justify="Justify.Center">
-                <MudItem>
-                    <MudCard>
-                        <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
-                        <MudCardContent>
-                            <MudText>Story of the day 1</MudText>
-                            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudItem>
-                <MudItem>
-                    <MudCard>
-                        <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
-                        <MudCardContent>
-                            <MudText>Story of the day 2</MudText>
-                            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudItem>
-                <MudItem>
-                    <MudCard>
-                        <MudCardMedia Image="images/stock_card_food.jpg" Height="200" />
-                        <MudCardContent>
-                            <MudText>Story of the day 3</MudText>
-                            <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudItem>
-            </MudGrid>
-        </MudItem>
 
-    </MudStack>
- </MudPaper>
 
 @code {
     [Inject] private LayoutService LayoutService { get; set; }
+
+    public bool Starred { get; set; }
+    public string SearchText { get; set; } = "";
+    public IEnumerable<Cuisine> SelectedCuisines { get; set; } = new HashSet<Cuisine>();
+
+    public MudChip[] SelectedFilterChips;
 
     protected override void OnInitialized()
     {
@@ -67,9 +153,17 @@
         LayoutService.MajorUpdateOccured -= LayoutServiceOnMajorUpdateOccured;
     }
 
+    Func<Cuisine, string> CuisineConverter => cuisine => cuisine.Country;
+
     private void LayoutServiceOnMajorUpdateOccured(object? sender, EventArgs e)
     {
         StateHasChanged();
+    }
+
+    void Closed(MudChip chip)
+    {
+        var cuisine = (Cuisine)chip.Value;
+        SelectedCuisines = SelectedCuisines.Where(x => !x.Equals(cuisine));
     }
 }
 
