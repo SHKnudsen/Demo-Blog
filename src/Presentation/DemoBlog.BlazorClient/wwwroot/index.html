@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<style>
+    .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -13,7 +34,48 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div id="app">
+            <style>
+                .mud-wasm-cont {
+                    left: 50%;
+                    padding: 10vmin;
+                    position: fixed;
+                    text-align: center;
+                    top: 50%;
+                    transform: translate(-50%,-50%)
+                }
+
+                .loader {
+                    border: 16px solid #f3f3f3; /* Light grey */
+                    border-top: 16px solid #8B5000; /* Blue */
+                    border-radius: 50%;
+                    width: 120px;
+                    height: 120px;
+                    animation: spin 2s linear infinite;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+
+            <div style="height: 100%; width: 100%; margin: 0; position: fixed;">
+                <div class="mud-wasm-cont pos" style="position:absolute">
+                    <img src="images/logo-nobg.png" alt="My Happy SVG" />
+                </div>
+                <div style="position:absolute">
+                    <div class="loader" />
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.

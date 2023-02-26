@@ -10,7 +10,7 @@ namespace DemoBlog.BlazorClient.Services
 
         public bool IsDarkMode { get; private set; } = false;
 
-        public MudTheme CurrentTheme { get; private set; }
+        public BlogTheme CurrentTheme { get; private set; }
 
         public event EventHandler MajorUpdateOccured;
         
