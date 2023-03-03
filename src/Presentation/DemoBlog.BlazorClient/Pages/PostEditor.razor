@@ -1,0 +1,27 @@
+﻿@page "/editor"
+@using PSC.Blazor.Components.MarkdownEditor
+@using PSC.Blazor.Components.MarkdownEditor.EventsArgs
+
+<MudStack Spacing="1">
+    <div class="d-flex justify-center flex-grow-1" style="height:200px; position:relative">
+        <MudImage ObjectFit="ObjectFit.Cover" Src="images/stock_card_food.jpg" Style="width:100%; height:100%; position:relative; vertical-align:middle" Class="rounded-lg"></MudImage>
+    </div>
+
+    <MudTextField @bind-Value="PostTitle" Label="Post Title" HelperText="Enter title of your post" Variant="Variant.Outlined"></MudTextField>
+    <MudTextField @bind-Value="PostSubTitle" Label="Post Sub-title" HelperText="Enter sub-title of your post" Variant="Variant.Outlined"></MudTextField>
+    <MarkdownEditor Value="@PostContent" UploadImage="true" />
+
+
+    <MudStack Row="true">
+        <MudFab Color="Color.Success" StartIcon="@Icons.Material.Filled.Publish" />
+        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Save" />
+    </MudStack>
+</MudStack>
+
+
+@code {
+    string PostContent = "## Lorem Ipsum \n Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non finibus velit. Vestibulum non hendrerit nibh. Morbi ante eros, malesuada sit amet pharetra ut, accumsan a lorem. Nam fermentum, velit at lacinia hendrerit, nisi sem laoreet enim, sit amet dictum velit tortor eu risus.";
+    string PostTitle;
+    string PostSubTitle;
+
+}

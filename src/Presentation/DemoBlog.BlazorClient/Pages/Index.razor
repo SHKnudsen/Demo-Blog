@@ -13,80 +13,14 @@
             </MudItem>
             <MudItem>
                 <MudGrid Justify="Justify.Center">
-                    <MudItem xs="4">
-                        <MudCard>
-                            <MudCardMedia Image="images/stock_card_food.jpg" Height="250" />
-                            <MudCardHeader>
-                                <CardHeaderContent>
-                                    <MudText Typo="Typo.h6">Story of the day 1</MudText>
-                                    <MudText Typo="Typo.subtitle1">Story of the day 1</MudText>
-                                </CardHeaderContent>
-                            </MudCardHeader>
-                            <MudCardContent>
-                                <MudText Typo="Typo.body1">The quick, brown fox jumps over a lazy dog.</MudText>
-                            </MudCardContent>
-                            <MudCardActions Class="justify-end gap-2">
-                                <MudButton Size="Size.Large" Color="Color.Primary" Variant="Variant.Text" Class="mud-elevation-1 hover:mud-primary-hover" Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; border-radius: 12px;")">View Post</MudButton>
-                                <MudToggleIconButton @bind-Toggled="@Starred"
-                                                     Size="Size.Medium"
-                                                     Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; width: 40px; border-radius: 12px;")"
-                                                     Class="mud-elevation-1"
-                                                     Variant="Variant.Text"
-                                                     Color="Color.Primary"
-                                                     Icon="@Icons.Material.Filled.StarBorder"
-                                                     ToggledIcon="@Icons.Material.Filled.Star" ToggledColor="Color.Primary" />
-                            </MudCardActions>
-                        </MudCard>
+                    <MudItem xs="12" sm="6" md="4">
+                        <BlogPostCard Title="Story of the day 1" Subtitle="Story of the day 1" Summary="The quick, brown fox jumps over a lazy dog." />
                     </MudItem>
-                    <MudItem xs="4">
-                        <MudCard>
-                            <MudCardMedia Image="images/stock_card_food.jpg" Height="250" />
-                            <MudCardHeader>
-                                <CardHeaderContent>
-                                    <MudText Typo="Typo.h6">Story of the day 2</MudText>
-                                    <MudText Typo="Typo.subtitle1">Story of the day 2</MudText>
-                                </CardHeaderContent>
-                            </MudCardHeader>
-                            <MudCardContent>
-                                <MudText Typo="Typo.body1">The quick, brown fox jumps over a lazy dog.</MudText>
-                            </MudCardContent>
-                            <MudCardActions Class="justify-end gap-2">
-                                <MudButton Size="Size.Large" Color="Color.Primary" Variant="Variant.Text" Class="mud-elevation-1 hover:mud-primary-hover" Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; border-radius: 12px;")">View Post</MudButton>
-                                <MudToggleIconButton @bind-Toggled="@Starred"
-                                                     Size="Size.Medium"
-                                                     Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; width: 40px; border-radius: 12px;")"
-                                                     Class="mud-elevation-1"
-                                                     Variant="Variant.Text"
-                                                     Color="Color.Primary"
-                                                     Icon="@Icons.Material.Filled.StarBorder"
-                                                     ToggledIcon="@Icons.Material.Filled.Star" ToggledColor="Color.Primary" />
-                            </MudCardActions>
-                        </MudCard>
+                    <MudItem xs="12" sm="6" md="4">
+                        <BlogPostCard Title="Story of the day 2" Subtitle="Story of the day 2" Summary="The quick, brown fox jumps over a lazy dog." />
                     </MudItem>
-                    <MudItem xs="4">
-                        <MudCard>
-                            <MudCardMedia Image="images/stock_card_food.jpg" Height="250" />
-                            <MudCardHeader>
-                                <CardHeaderContent>
-                                    <MudText Typo="Typo.h6">Story of the day 3</MudText>
-                                    <MudText Typo="Typo.subtitle1">Story of the day 3</MudText>
-                                </CardHeaderContent>
-                            </MudCardHeader>
-                            <MudCardContent>
-                                <MudText Typo="Typo.body1">The quick, brown fox jumps over a lazy dog.</MudText>
-                            </MudCardContent>
-                            <MudCardActions Class="justify-end gap-2">
-                                <MudButton Size="Size.Large" Color="Color.Primary" Variant="Variant.Text" Class="mud-elevation-1 hover:mud-primary-hover" Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; border-radius: 12px;")">View Post</MudButton>
-                                <MudToggleIconButton @bind-Toggled="@Starred"
-                                                     Size="Size.Medium"
-                                                     Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface3}; height: 40px; width: 40px; border-radius: 12px;")"
-                                                     Class="mud-elevation-1"
-                                                     Variant="Variant.Text"
-                                                     Color="Color.Primary"
-                                                     Icon="@Icons.Material.Filled.StarBorder"
-                                                     ToggledIcon="@Icons.Material.Filled.Star" ToggledColor="Color.Primary" />
-                            </MudCardActions>
-                        </MudCard>
+                    <MudItem xs="12" sm="6" md="4">
+                        <BlogPostCard Title="Story of the day 3" Subtitle="Story of the day 3" Summary="The quick, brown fox jumps over a lazy dog." />
                     </MudItem>
                 </MudGrid>
             </MudItem>
@@ -94,9 +28,9 @@
     </MudPaper>
     <MudPaper Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface5}; border-radius: 20px; padding: 60px;")">
         <MudGrid Justify="Justify.Center" Style="padding-bottom: 28px">
-            <MudChipSet @bind-SelectedChips="SelectedFilterChips" MultiSelection="true">
-                <MudChip Icon="@Icons.Material.Filled.RestaurantMenu" Text="Food"></MudChip>
-                <MudChip Icon="@Icons.Material.Filled.LocalBar" Text="Cocktails"></MudChip>
+            <MudChipSet @bind-SelectedChips="SelectedFilterChips" MultiSelection="true" Filter="true">
+                <MudChip Default="true" Variant="Variant.Text" CheckedIcon="@Icons.Material.Filled.RestaurantMenu" Icon="@Icons.Material.Filled.RestaurantMenu" Text="Food" Color="Color.Primary"></MudChip>
+                <MudChip Default="true" Variant="Variant.Text" CheckedIcon="@Icons.Material.Filled.LocalBar" Icon="@Icons.Material.Filled.LocalBar" Text="Cocktails" Color="Color.Primary"></MudChip>
             </MudChipSet>
         </MudGrid>
         <MudGrid>
