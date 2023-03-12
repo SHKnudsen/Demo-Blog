@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "DemoBlog.API": {
+      "commandName": "Project"
+    }
+  }
+}
