@@ -1,0 +1,104 @@
+﻿@page "/"
+@using DemoBlog.BlazorClient.Services;
+@using DemoBlog.Domain.Entities;
+@using MudBlazor.Utilities;
+
+<PageTitle>Index</PageTitle>
+<MudStack Spacing="7">
+    <MudPaper Outlined="false" Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface2}; border-radius: 20px")">
+        <MudStack Spacing="16" Elevation="1" Style="padding: 60px;">
+            <MudItem>
+                <MudText Align="Align.Center" Typo="Typo.h3" GutterBottom="true">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TITLE</MudText>
+                <MudText Align="Align.Center">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TEXT</MudText>
+            </MudItem>
+            <MudItem>
+                <MudGrid Justify="Justify.Center">
+                    <MudItem xs="12" sm="6" md="4">
+                        <BlogPostCard Title="Story of the day 1" Subtitle="Story of the day 1" Summary="The quick, brown fox jumps over a lazy dog." />
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <BlogPostCard Title="Story of the day 2" Subtitle="Story of the day 2" Summary="The quick, brown fox jumps over a lazy dog." />
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <BlogPostCard Title="Story of the day 3" Subtitle="Story of the day 3" Summary="The quick, brown fox jumps over a lazy dog." />
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudStack>
+    </MudPaper>
+    <MudPaper Style="@($"background: {LayoutService.CurrentTheme.SurfacePalette.Surface5}; border-radius: 20px; padding: 60px;")">
+        <MudGrid Justify="Justify.Center" Style="padding-bottom: 28px">
+            <MudChipSet @bind-SelectedChips="SelectedFilterChips" MultiSelection="true" Filter="true">
+                <MudChip Default="true" Variant="Variant.Text" CheckedIcon="@Icons.Material.Filled.RestaurantMenu" Icon="@Icons.Material.Filled.RestaurantMenu" Text="Food" Color="Color.Primary"></MudChip>
+                <MudChip Default="true" Variant="Variant.Text" CheckedIcon="@Icons.Material.Filled.LocalBar" Icon="@Icons.Material.Filled.LocalBar" Text="Cocktails" Color="Color.Primary"></MudChip>
+            </MudChipSet>
+        </MudGrid>
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="SearchText" Label="Find post" Variant="Variant.Filled" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudStack>
+                    <MudSelect @bind-SelectedValues="SelectedCuisines"
+                                Variant="Variant.Filled"
+                                MultiSelection="true"
+                                ToStringFunc="@CuisineConverter"
+                                Label="Select Cuisines"
+                                OpenIcon="@Icons.Material.Filled.Flag"
+                                AdornmentColor="Color.Secondary">
+                        @foreach (Cuisine item in Cuisines.GetAll())
+                        {
+                            <MudSelectItem Value="@item">
+                                <img src="@item.FlagSrc" height="14" class="mr-1" /> @item.Country
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudGrid Justify="Justify.Center">
+                        @foreach (Cuisine cuisine in SelectedCuisines)
+                        {
+                            <MudChip Value="@cuisine" Text="@cuisine.Country" Color="Color.Primary" OnClose="Closed"></MudChip>
+                        }
+                    </MudGrid>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudStack>
+
+
+
+@code {
+    [Inject] private LayoutService LayoutService { get; set; }
+
+    public bool Starred { get; set; }
+    public string SearchText { get; set; } = "";
+    public IEnumerable<Cuisine> SelectedCuisines { get; set; } = new HashSet<Cuisine>();
+
+    public MudChip[] SelectedFilterChips;
+
+    protected override void OnInitialized()
+    {
+        LayoutService.MajorUpdateOccured += LayoutServiceOnMajorUpdateOccured;
+        base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        LayoutService.MajorUpdateOccured -= LayoutServiceOnMajorUpdateOccured;
+    }
+
+    Func<Cuisine, string> CuisineConverter => cuisine => cuisine.Country;
+
+    private void LayoutServiceOnMajorUpdateOccured(object? sender, EventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    void Closed(MudChip chip)
+    {
+        var cuisine = (Cuisine)chip.Value;
+        SelectedCuisines = SelectedCuisines.Where(x => !x.Equals(cuisine));
+    }
+}
+
+
