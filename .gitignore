@@ -453,3 +453,4 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 src/Infrastructure/DemoBlog.FunctionsAPI/local.settings.json
+/src/DemoBlog.BlazorClient/wwwroot/appsettings.Development.json
