@@ -3,7 +3,7 @@ using DemoBlog.Domain.Utilities;
 using DemoBlog.Services.Abstraction.Configuration;
 using Microsoft.Extensions.Configuration;
 
-namespace DemoBlog.API.Configuration
+namespace DemoBlog.Services.Configuration
 {
     public class MediaStorageConnection : IBlobStorageConnection
     {
