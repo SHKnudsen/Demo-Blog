@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace DemoBlog.Data.Configuration
 {
-    internal class DbContextConnection : IBlobStorageConnection
+    internal class DbContextConnection : IDbConnection
     {
-        [DataMember(Name = "ConnectionStrings:BlogDb")]
+        [DataMember(Name = "ConnectionStrings:SqlDb")]
         public string ConnectionString { get; set; }
 
         public DbContextConnection(IConfiguration config) 

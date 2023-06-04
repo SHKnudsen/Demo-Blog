@@ -1,22 +1,25 @@
+using DemoBlog.Data.Configuration;
+using DemoBlog.FunctionsAPI.Middleware;
+using DemoBlog.Services.Configuration;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using DemoBlog.Services.Configuration;
-using Microsoft.Azure.Functions.Worker;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults(workerApplication =>
     {
-        workerApplication.UseAspNetCoreIntegration();
+        workerApplication.UseMiddleware<ExceptionHandlingMiddleware>();
     })
-    .ConfigureAspNetCoreIntegration()
+    .ConfigureOpenApi()
     .ConfigureServices(serviceCollection =>
     {
-        serviceCollection.RegisterServices();
+        serviceCollection
+            .RegisterDbContext()
+            .RegisterServices();
     })
     .ConfigureHostConfiguration(builder =>
     {
         builder
-            //.SetBasePath(builder.GetContext().ApplicationRootPath)
             .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables();
     })

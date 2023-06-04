@@ -9,12 +9,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.14.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.OpenApi" Version="1.5.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.10.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.0.0-preview1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\DemoBlog.Contracts\DemoBlog.Contracts.csproj" />
     <ProjectReference Include="..\..\Core\DemoBlog.Services.Abstraction\DemoBlog.Services.Abstraction.csproj" />
     <ProjectReference Include="..\..\Core\DemoBlog.Services\DemoBlog.Services.csproj" />
+    <ProjectReference Include="..\DemoBlog.Data\DemoBlog.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="certificate.pfx">

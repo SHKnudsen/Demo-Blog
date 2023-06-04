@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DemoBlog.Contracts\DemoBlog.Contracts.csproj" />
-    <ProjectReference Include="..\DemoBlog.Domain\DemoBlog.Domain.csproj" />
+    <PackageReference Include="System.Text.Json" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

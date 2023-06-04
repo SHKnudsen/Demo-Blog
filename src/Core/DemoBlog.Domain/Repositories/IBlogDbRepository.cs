@@ -33,12 +33,12 @@ namespace DemoBlog.Domain.Repositories
         /// Delete post
         /// </summary>
         /// <param name="id"></param>
-        void DeleteById(int id);
+        void Remove(BlogPost post);
 
         /// <summary>
         /// Add new post
         /// </summary>
         /// <param name="post"></param>
-        void AddPost(BlogPost post);
+        void Add(BlogPost post);
     }
 }

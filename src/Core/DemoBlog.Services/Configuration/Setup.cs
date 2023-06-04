@@ -12,7 +12,8 @@ namespace DemoBlog.Services.Configuration
         {
             services
                 .AddSingleton<IMediaStorageService, BlobMediaStorageService>()
-                .AddSingleton<IBlobStorageConnection, MediaStorageConnection>();
+                .AddSingleton<IBlobStorageConnection, MediaStorageConnection>()
+                .AddSingleton<IBlogPostDbService, BlogDbService>();
 
             return services;
         }
