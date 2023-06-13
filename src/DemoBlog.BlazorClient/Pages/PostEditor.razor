@@ -6,8 +6,6 @@
 @using System.Net.Http.Json
 @using System.Web;
 
-@inject MediaBlobClient MediaBlobClient
-
 <MudStack Spacing="2">
     <MudFileUpload T="IBrowserFile" Icon="@Icons.Material.Filled.Image" FilesChanged="UploadFiles" Hidden="false" Class="flex-1 align-content-center" InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20" InputStyle="opacity:0"
                        @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass">
@@ -42,54 +40,7 @@
 
 
     <MudStack Row="true">
-        <MudFab Color="Color.Success" StartIcon="@Icons.Material.Filled.Publish" />
+        <MudFab Color="Color.Success" StartIcon="@Icons.Material.Filled.Publish" OnClick="PublishPostAsync" />
         <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Save" />
     </MudStack>
 </MudStack>
-
-
-@code {
-    string PostContent = "## Lorem Ipsum \n Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non finibus velit. Vestibulum non hendrerit nibh. Morbi ante eros, malesuada sit amet pharetra ut, accumsan a lorem. Nam fermentum, velit at lacinia hendrerit, nisi sem laoreet enim, sit amet dictum velit tortor eu risus.";
-    string PostTitle;
-    string PostSubTitle;
-
-    private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
-    private string DragClass = DefaultDragClass;
-
-    private string _imageDataUrl;
-
-    private string _postId = Guid.NewGuid().ToString();
-
-    private async void UploadFiles(IBrowserFile file)
-    {
-        try
-        {
-            MemoryStream ms = new MemoryStream();
-            await file.OpenReadStream().CopyToAsync(ms);
-            _imageDataUrl = ms.ToBase64Image();
-            StateHasChanged();
-            await MediaBlobClient.UploadMedia(file, _postId);
-
-        }
-        catch (Exception e)
-        {
-            throw e;
-        }
-    }
-
-    private void SetDragClass()
-    {
-        DragClass = $"{DefaultDragClass} mud-border-primary";
-    }
-
-    private void ClearDragClass()
-    {
-        DragClass = DefaultDragClass;
-    }
-
-    private void Clear()
-    {
-        _imageDataUrl = string.Empty;
-        ClearDragClass();
-    }
-}

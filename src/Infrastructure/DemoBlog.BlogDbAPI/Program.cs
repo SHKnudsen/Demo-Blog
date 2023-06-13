@@ -12,7 +12,8 @@ var host = new HostBuilder()
     .ConfigureServices(serviceCollection =>
     {
         serviceCollection
-            .RegisterMediaServices();
+            .RegisterDbContext()
+            .RegisterBlogDbService();
     })
     .ConfigureHostConfiguration(builder =>
     {

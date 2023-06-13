@@ -7,15 +7,14 @@ namespace DemoBlog.Services.Configuration
 {
     public static class Setup
     {
-        public static IServiceCollection RegisterServices(
+        public static IServiceCollection RegisterMediaServices(
             this IServiceCollection services)
-        {
-            services
+            => services
                 .AddSingleton<IMediaStorageService, BlobMediaStorageService>()
-                .AddSingleton<IBlobStorageConnection, MediaStorageConnection>()
-                .AddSingleton<IBlogPostDbService, BlogDbService>();
+                .AddSingleton<IBlobStorageConnection, MediaStorageConnection>();
 
-            return services;
-        }
+        public static IServiceCollection RegisterBlogDbService(
+            this IServiceCollection services)
+            => services.AddSingleton<IBlogPostDbService, BlogDbService>();
     }
 }

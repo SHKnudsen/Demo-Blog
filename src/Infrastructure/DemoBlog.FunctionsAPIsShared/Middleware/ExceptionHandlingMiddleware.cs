@@ -4,11 +4,10 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.Functions.Worker.Middleware;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 
-namespace DemoBlog.FunctionsAPI.Middleware;
+namespace DemoBlog.FunctionsAPIsShared;
 
-internal sealed class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
+public sealed class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
 {
     private readonly ILogger _logger;
 
@@ -59,9 +58,9 @@ internal sealed class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
     }
 
     private static async Task CreateResponse(
-        HttpRequestData context, 
-        InvocationResult invocationResult, 
-        HttpStatusCode statusCode, 
+        HttpRequestData context,
+        InvocationResult invocationResult,
+        HttpStatusCode statusCode,
         string message)
     {
         var response = context.CreateResponse(statusCode);

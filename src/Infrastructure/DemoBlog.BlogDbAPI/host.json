@@ -8,5 +8,5 @@
       }
     }
   },
-  "extensions": {"http": {"routePrefix": "mediafiles"}}
+  "extensions": { "http": { "routePrefix": "blogdb" } }
 }

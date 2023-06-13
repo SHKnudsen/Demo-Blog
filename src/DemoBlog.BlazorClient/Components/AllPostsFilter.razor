@@ -1,0 +1,38 @@
+﻿@using DemoBlog.Domain.Entities;
+<MudPaper Style="@($"background: {BackgroundColor}; border-radius: 20px; padding: 60px;")">
+    <MudGrid Justify="Justify.Center" Style="padding-bottom: 28px">
+        <MudChipSet @bind-SelectedChips="SelectedFilterChips" MultiSelection="true" Filter="true">
+            <MudChip Default="true" Variant="Variant.Text" CheckedIcon="@Icons.Material.Filled.RestaurantMenu" Icon="@Icons.Material.Filled.RestaurantMenu" Text="Food" Color="Color.Primary"></MudChip>
+            <MudChip Default="true" Variant="Variant.Text" CheckedIcon="@Icons.Material.Filled.LocalBar" Icon="@Icons.Material.Filled.LocalBar" Text="Cocktails" Color="Color.Primary"></MudChip>
+        </MudChipSet>
+    </MudGrid>
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudTextField @bind-Value="SearchText" Label="Find post" Variant="Variant.Filled" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudStack>
+                <MudSelect @bind-SelectedValues="SelectedCuisines"
+                           Variant="Variant.Filled"
+                           MultiSelection="true"
+                           ToStringFunc="@CuisineConverter"
+                           Label="Select Cuisines"
+                           OpenIcon="@Icons.Material.Filled.Flag"
+                           AdornmentColor="Color.Secondary">
+                    @foreach (Cuisine item in Cuisines.GetAll())
+                    {
+                        <MudSelectItem Value="@item">
+                            <img src="@item.FlagSrc" height="14" class="mr-1" /> @item.Country
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+                <MudGrid Justify="Justify.Center">
+                    @foreach (Cuisine cuisine in SelectedCuisines)
+                    {
+                        <MudChip Value="@cuisine" Text="@cuisine.Country" Color="Color.Primary" OnClose="Closed"></MudChip>
+                    }
+                </MudGrid>
+            </MudStack>
+        </MudItem>
+    </MudGrid>
+</MudPaper>

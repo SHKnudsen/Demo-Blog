@@ -1,21 +1,17 @@
 using System.Net;
-using System.Web.Http;
 using DemoBlog.Contracts;
-using DemoBlog.Domain.Entities;
 using DemoBlog.Domain.Exceptions;
 using DemoBlog.Services.Abstraction;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace DemoBlog.FunctionsAPI
+namespace DemoBlog.BlogDbAPI
 {
     public class BlogDbFunction
     {
+        private const string ROUTE_PREFIX = "blogposts";
         private readonly ILogger _logger;
         private readonly IBlogPostDbService _blogPostDbService;
 
@@ -29,7 +25,7 @@ namespace DemoBlog.FunctionsAPI
 
         [Function(nameof(AddNewPostAsync))]
         public async Task<HttpResponseData> AddNewPostAsync(
-            [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = ROUTE_PREFIX)] HttpRequestData req)
         {
             _logger.LogInformation($"{this.GetType().Name} HTTP trigger processed {nameof(AddNewPostAsync)} request");
 
@@ -46,7 +42,7 @@ namespace DemoBlog.FunctionsAPI
 
         [Function(nameof(DeletePostAsync))]
         public async Task<HttpResponseData> DeletePostAsync(
-            [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = ROUTE_PREFIX + "/{id}")] HttpRequestData req,
             int id)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
@@ -56,7 +52,7 @@ namespace DemoBlog.FunctionsAPI
 
         [Function(nameof(GetPosts))]
         public async Task<HttpResponseData> GetPosts(
-        [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = ROUTE_PREFIX)] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             var posts = await _blogPostDbService.GetAllAsync();
@@ -68,7 +64,7 @@ namespace DemoBlog.FunctionsAPI
 
         [Function(nameof(GetPost))]
         public async Task<HttpResponseData> GetPost(
-            [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = ROUTE_PREFIX + "/{id}")] HttpRequestData req,
             int id)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");

@@ -1,0 +1,21 @@
+﻿<MudPaper Outlined="false" Style="@($"background: {BackgroundColor}; border-radius: 20px")">
+    <MudStack Spacing="16" Elevation="1" Style="padding: 60px;">
+        <MudItem>
+            <MudText Align="Align.Center" Typo="Typo.h3" GutterBottom="true">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TITLE</MudText>
+            <MudText Align="Align.Center">@StaticContent.StaticText.FrontPageTextContent.WELCOME_TEXT</MudText>
+        </MudItem>
+        <MudItem>
+            <MudGrid Justify="Justify.Center">
+                <MudItem xs="12" sm="6" md="4">
+                    <BlogPostCard Title="Story of the day 1" Subtitle="Story of the day 1" Summary="The quick, brown fox jumps over a lazy dog." />
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4">
+                    <BlogPostCard Title="Story of the day 2" Subtitle="Story of the day 2" Summary="The quick, brown fox jumps over a lazy dog." />
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4">
+                    <BlogPostCard Title="Story of the day 3" Subtitle="Story of the day 3" Summary="The quick, brown fox jumps over a lazy dog." />
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudStack>
+</MudPaper>

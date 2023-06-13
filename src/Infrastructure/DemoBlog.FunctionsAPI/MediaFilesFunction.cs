@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace DemoBlog.FunctionsAPI
+namespace DemoBlog.MediaFilesAPI
 {
     public class MediaFilesFunction
     {
+        private const string ROUTE_PREFIX = "mediafiles";
         private readonly ILogger _logger;
         private readonly IMediaStorageService _mediaStorageService;
 
@@ -21,7 +22,7 @@ namespace DemoBlog.FunctionsAPI
 
         [Function(nameof(UploadMediaStream))]
         public async Task<IActionResult> UploadMediaStream(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req)
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = ROUTE_PREFIX)] HttpRequest req)
         {
             var form = await req.ReadFormAsync();
 
@@ -38,7 +39,7 @@ namespace DemoBlog.FunctionsAPI
 
         [Function(nameof(GetMedia))]
         public async Task<IActionResult> GetMedia(
-              [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetMedia/{blobName}")] HttpRequest req,
+              [HttpTrigger(AuthorizationLevel.Function, "get", Route = ROUTE_PREFIX + "/{blobName}/url")] HttpRequest req,
               string blobName)
         {
             var url = await _mediaStorageService.GetMediaUrl(blobName);
@@ -47,7 +48,7 @@ namespace DemoBlog.FunctionsAPI
 
         [Function(nameof(GetMediaStream))]
         public async Task<IActionResult> GetMediaStream(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetMediaStream/{blobName}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = ROUTE_PREFIX + "/{blobName}")] HttpRequest req,
             string blobName)
         {
             blobName = Uri.UnescapeDataString(blobName);

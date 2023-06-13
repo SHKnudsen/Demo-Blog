@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "DemoBlog.MediaFilesAPI": {
+    "DemoBlog.BlogDbAPI": {
       "commandName": "Project",
-      //"commandLineArgs": "--port 7258",
+      //"commandLineArgs": "--port 7141",
       //"launchBrowser": false
     }
   }

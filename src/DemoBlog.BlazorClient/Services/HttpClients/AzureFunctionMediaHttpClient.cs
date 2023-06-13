@@ -3,39 +3,33 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace DemoBlog.BlazorClient.Services.HttpClients
 {
-    public class MediaBlobClient
+    public class AzureFunctionMediaHttpClient
     {
         private readonly HttpClient _httpClient;
 
-        public MediaBlobClient(HttpClient httpClient)
+        public AzureFunctionMediaHttpClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
         public async Task<string> UploadMedia(IBrowserFile file, string postId)
         {
-            try
-            {
-                using var content = new MultipartFormDataContent();
-                var blobName = $"{postId}/{file.Name}";
-                content.Add(new StringContent(blobName), "blobName");
 
-                var memoryStream = new MemoryStream();
-                await file.OpenReadStream().CopyToAsync(memoryStream);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                var mediaStream = new StreamContent(memoryStream);
-                mediaStream.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            using var content = new MultipartFormDataContent();
+            var blobName = $"{postId}/{file.Name}";
+            content.Add(new StringContent(blobName), "blobName");
 
-                content.Add(mediaStream, "mediaFileStream", file.Name);
+            var memoryStream = new MemoryStream();
+            await file.OpenReadStream().CopyToAsync(memoryStream);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var mediaStream = new StreamContent(memoryStream);
+            mediaStream.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
 
-                var result = await _httpClient.PostAsync("api/UploadMediaStream", content);
-                return blobName;
-            }
-            catch (Exception e)
-            {
+            content.Add(mediaStream, "mediaFileStream", file.Name);
 
-                throw;
-            }
+            await _httpClient.PostAsync("api/UploadMediaStream", content);
+            return blobName;
+
         }
 
         public async Task<string> GetMediaBlobAsBase64(string blobName)

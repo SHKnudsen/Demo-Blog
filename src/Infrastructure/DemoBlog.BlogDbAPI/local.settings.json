@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+  },
+  "Host": {
+    "LocalHttpPort": 7072,
+    "CORS": "*"
+  },
+  "ConnectionStrings": {
+    "SqlDb": "Server=localhost,1433;Database=BlogPostDatabse;User Id=sa;Password=pa55w0rd!;Encrypt=False"
+  }
+}

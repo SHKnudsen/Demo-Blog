@@ -5,14 +5,29 @@ using DemoBlog.BlazorClient.Services.HttpClients;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
+using Polly;
+using Polly.Extensions.Http;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-var baseAddress = builder.Configuration["BaseAddress"] ?? builder.HostEnvironment.BaseAddress;
+var httpRetryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
+    .WaitAndRetryAsync(3, retry => TimeSpan.FromSeconds(retry));
 
-builder.Services.AddHttpClient<MediaBlobClient>(client => client.BaseAddress = new Uri(baseAddress));
+builder.Services
+    .AddHttpClient<AzureFunctionMediaHttpClient>(client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration.GetConnectionString("AzureFunctionMediaApiAddress"));
+    })
+    .AddPolicyHandler(httpRetryPolicy);
+
+builder.Services
+    .AddHttpClient<AzureFunctionBlogPostsHttpClient>(client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration.GetConnectionString("AzureFunctionBlogPostApiAddress"));
+    })
+    .AddPolicyHandler(httpRetryPolicy);
 
 builder.Services
     .AddMudServices()
