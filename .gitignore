@@ -455,3 +455,5 @@ $RECYCLE.BIN/
 src/Infrastructure/DemoBlog.FunctionsAPI/local.settings.json
 /src/DemoBlog.BlazorClient/wwwroot/appsettings.Development.json
 *.yaml
+src/Infrastructure/DemoBlog.BlogDbAPI/local.settings.json
+/src/Infrastructure/DemoBlog.BlogDbAPI/local.settings.json
