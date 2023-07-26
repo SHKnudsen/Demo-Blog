@@ -20,6 +20,7 @@ public class BlogDbService : IBlogPostDbService
     {
         var unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
         var blogPost = createBlogPostDto.Adapt<BlogPost>();
+        blogPost.DateCreated = DateTime.UtcNow;
         unitOfWork.RepositoryManager.BlogRepository.Add(blogPost);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return blogPost;
@@ -48,5 +49,20 @@ public class BlogDbService : IBlogPostDbService
         var unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
         var repo = unitOfWork.RepositoryManager.BlogRepository;
         return await repo.GetByIdAsync(postId, cancellationToken) ?? throw new BlogPostNotFoundException(postId);
+    }
+
+    public async Task<BlogPost> UpdateAsync(BlogPost blogPost, CancellationToken cancellationToken = default)
+    {
+        var unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
+        var repo = unitOfWork.RepositoryManager.BlogRepository;
+        var existingPost = await repo.GetByIdAsync(blogPost.Id, cancellationToken) ?? throw new BlogPostNotFoundException(blogPost.Id);
+        existingPost.Title = blogPost.Title;
+        existingPost.SubTitle = blogPost.SubTitle;
+        existingPost.Content = blogPost.Content;
+        existingPost.Description = blogPost.Description;
+        existingPost.DateUpdated = DateTime.UtcNow;
+        existingPost.Published = blogPost.Published;
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return existingPost;
     }
 }

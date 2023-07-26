@@ -1,5 +1,7 @@
 using System.Net;
+using System.Text.Json;
 using DemoBlog.Contracts;
+using DemoBlog.Domain.Entities;
 using DemoBlog.Domain.Exceptions;
 using DemoBlog.Services.Abstraction;
 using Microsoft.Azure.Functions.Worker;
@@ -11,6 +13,8 @@ namespace DemoBlog.BlogDbAPI
 {
     public class BlogDbFunction
     {
+        private static JsonSerializerOptions _defaultSerializerOptions = new(JsonSerializerDefaults.Web);
+
         private const string ROUTE_PREFIX = "blogposts";
         private readonly ILogger _logger;
         private readonly IBlogPostDbService _blogPostDbService;
@@ -31,14 +35,13 @@ namespace DemoBlog.BlogDbAPI
 
             var body = await new StreamReader(req.Body).ReadToEndAsync();
             CreateBlogPostDto createBlogPostDto = JsonSerializer
-                .Deserialize<CreateBlogPostDto>(body) ?? throw new CouldNotCreateBlogPostDtoException();
+                .Deserialize<CreateBlogPostDto>(body, _defaultSerializerOptions) ?? throw new CouldNotCreateBlogPostDtoException();
 
             var blogPost = await _blogPostDbService.CreateAsync(createBlogPostDto);
             var response = req.CreateResponse(HttpStatusCode.Created);
             await response.WriteAsJsonAsync(blogPost, response.StatusCode);
             return response;
         }
-
 
         [Function(nameof(DeletePostAsync))]
         public async Task<HttpResponseData> DeletePostAsync(
@@ -48,6 +51,20 @@ namespace DemoBlog.BlogDbAPI
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             await _blogPostDbService.DeleteAsync(id);
             return req.CreateResponse(HttpStatusCode.NoContent);
+        }
+
+        [Function(nameof(UpdatePostAsync))]
+        public async Task<HttpResponseData> UpdatePostAsync(
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = ROUTE_PREFIX)] HttpRequestData req)
+        {
+            _logger.LogInformation("C# HTTP trigger function processed a request.");
+            var body = await new StreamReader(req.Body).ReadToEndAsync();
+            BlogPost post = JsonSerializer
+                .Deserialize<BlogPost>(body, _defaultSerializerOptions) ?? throw new UpdateMissingBlogPostException();
+            var updatedPost = await _blogPostDbService.UpdateAsync(post);
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(updatedPost, response.StatusCode);
+            return response;
         }
 
         [Function(nameof(GetPosts))]

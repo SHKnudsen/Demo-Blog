@@ -31,5 +31,9 @@ namespace DemoBlog.Domain.Entities
 
         [Required]
         public string Content { get; set; }
+
+        public DateTime Published { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateUpdated { get; set; }
     }
 }

@@ -1,7 +1,9 @@
+using System.Text.Json;
 using DemoBlog.Data.Configuration;
 using DemoBlog.FunctionsAPIsShared;
 using DemoBlog.Services.Configuration;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 var host = new HostBuilder()
@@ -14,6 +16,10 @@ var host = new HostBuilder()
         serviceCollection
             .RegisterDbContext()
             .RegisterBlogDbService();
+            //.Configure<JsonSerializerOptions>(o =>
+            //{
+            //    o.PropertyNameCaseInsensitive = true;
+            //});
     })
     .ConfigureHostConfiguration(builder =>
     {

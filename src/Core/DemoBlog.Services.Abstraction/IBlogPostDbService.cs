@@ -17,4 +17,6 @@ public interface IBlogPostDbService
     Task<BlogPost> CreateAsync(CreateBlogPostDto createBlogPostDto, CancellationToken cancellationToken = default);
 
     Task DeleteAsync(int postId, CancellationToken cancellationToken = default);
+
+    Task<BlogPost> UpdateAsync(BlogPost blogPost, CancellationToken cancellationToken = default);
 }

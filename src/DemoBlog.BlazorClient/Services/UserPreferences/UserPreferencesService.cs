@@ -26,7 +26,7 @@ namespace DemoBlog.BlazorClient.Services
     public class UserPreferencesService : IUserPreferencesService
     {
         private readonly ILocalStorageService _localStorage;
-        private const string Key = "userPreferences";
+        private const string UserPreferenceKey = "userPreferences";
         
         public UserPreferencesService(ILocalStorageService localStorage)
         {
@@ -35,12 +35,17 @@ namespace DemoBlog.BlazorClient.Services
         
         public async Task SaveUserPreferences(UserPreferences userPreferences)
         {
-            await _localStorage.SetItemAsync(Key, userPreferences);
+            await _localStorage.SetItemAsync(UserPreferenceKey, userPreferences);
         }
 
         public async Task<UserPreferences> LoadUserPreferences()
         {
-            return await _localStorage.GetItemAsync<UserPreferences>(Key);
+            return await _localStorage.GetItemAsync<UserPreferences>(UserPreferenceKey);
+        }
+
+        public async Task SaveLocalMedia(Stream media, string name)
+        {
+            await _localStorage.SetItemAsync(name, media);
         }
     }
 }

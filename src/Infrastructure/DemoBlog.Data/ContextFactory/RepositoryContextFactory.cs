@@ -11,7 +11,7 @@ namespace DemoBlog.Data.ContextFactory
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../DemoBlog.MediaFilesAPI/local.settings.json")
+                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../DemoBlog.BlogDbAPI/local.settings.json")
                 .Build();
 
             var connectionConfig = new DbContextConnection(configuration);

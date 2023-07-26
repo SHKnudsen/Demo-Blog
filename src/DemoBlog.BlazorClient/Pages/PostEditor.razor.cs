@@ -1,6 +1,7 @@
-﻿using DemoBlog.BlazorClient.Services.HttpClients;
-using DemoBlog.BlazorClient.Utils;
+﻿using Blazorise;
+using DemoBlog.BlazorClient.Services.HttpClients;
 using DemoBlog.Contracts;
+using DemoBlog.Domain.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
@@ -8,16 +9,14 @@ namespace DemoBlog.BlazorClient.Pages
 {
     public partial class PostEditor
     {
-        string PostContent = "## Lorem Ipsum \n Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non finibus velit. Vestibulum non hendrerit nibh. Morbi ante eros, malesuada sit amet pharetra ut, accumsan a lorem. Nam fermentum, velit at lacinia hendrerit, nisi sem laoreet enim, sit amet dictum velit tortor eu risus.";
-        string PostTitle;
-        string PostSubTitle;
-
-        private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
+        private static readonly string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
         private string DragClass = DefaultDragClass;
 
-        private string _imageDataUrl;
+        private readonly string _sessionId;
 
-        private string _postId = Guid.NewGuid().ToString();
+        private readonly Dictionary<string, string> _contentImages = new();
+        private string? _coverImage;
+        private BlogPost? _blogPost;
 
         [Inject]
         private AzureFunctionMediaHttpClient MediaBlobClient { get; set; }
@@ -25,16 +24,27 @@ namespace DemoBlog.BlazorClient.Pages
         [Inject]
         private AzureFunctionBlogPostsHttpClient BlogPostClient { get; set; }
 
+        protected CreateBlogPostDto Post { get; set; } = new CreateBlogPostDto();
+
+        public PostEditor()
+        {
+            _sessionId = Guid.NewGuid().ToString();
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+        }
+
         private async void UploadFiles(IBrowserFile file)
         {
             try
             {
-                MemoryStream ms = new MemoryStream();
+                using MemoryStream ms = new MemoryStream();
                 await file.OpenReadStream().CopyToAsync(ms);
-                _imageDataUrl = ms.ToBase64Image();
+                ms.Seek(0, SeekOrigin.Begin);
+                _coverImage = await MediaBlobClient.UploadMedia(file, _sessionId, true);
                 StateHasChanged();
-                await MediaBlobClient.UploadMedia(file, _postId);
-
             }
             catch (Exception e)
             {
@@ -54,27 +64,66 @@ namespace DemoBlog.BlazorClient.Pages
 
         private void Clear()
         {
-            _imageDataUrl = string.Empty;
+            _coverImage = string.Empty;
             ClearDragClass();
         }
 
-        private void SavePost()
+        private async Task SavePostAsync()
         {
-
+            _blogPost = await BlogPostClient.CreateNewPost(Post);
         }
 
         private async Task PublishPostAsync()
         {
-            var createPostDto = new CreateBlogPostDto
-            {
-                Content = PostContent,
-                Title = PostTitle,
-                SubTitle = PostSubTitle,
-                Description = "Not implemented yet",
-                Slug = "Not implemented yet"
-            };
+            if (_blogPost is null)
+                await SavePostAsync();
 
-            await BlogPostClient.CreateNewPost(createPostDto);
+            await BlogPostClient.PublishPostAsync(new BlogPost());
+        }
+
+        Task OnImageUploadStarted(FileStartedEventArgs e)
+        {
+            Console.WriteLine($"Started Image: {e.File.Name}");
+            return Task.CompletedTask;
+        }
+
+        async Task OnImageUploadChanged(FileChangedEventArgs e)
+        {
+            try
+            {
+                foreach (var file in e.Files)
+                {
+                    using var stream = new System.IO.MemoryStream();
+                    await file.WriteToStreamAsync(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    var url = await MediaBlobClient.UploadMedia(stream, file.Name, _sessionId, true);
+                    _contentImages.TryAdd(file.Name, url);
+                }
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+            }
+            finally
+            {
+                this.StateHasChanged();
+            }
+        }
+
+        Task OnImageUploadProgressed(FileProgressedEventArgs e)
+        {
+            Console.WriteLine($"Image: {e.File.Name} Progress: {(int)e.Percentage}");
+            return Task.CompletedTask;
+        }
+
+        Task OnImageUploadEnded(FileEndedEventArgs e)
+        {
+            if (!_contentImages.TryGetValue(e.File.Name, out string? url))
+                return Task.CompletedTask;
+
+            e.File.UploadUrl = url!;
+            Console.WriteLine($"Finished Image: {e.File.Name}, Success: {e.Success}");
+            return Task.CompletedTask;
         }
     }
 }

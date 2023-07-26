@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Blazorise;
 using DemoBlog.BlazorClient;
 using DemoBlog.BlazorClient.Services;
 using DemoBlog.BlazorClient.Services.HttpClients;
@@ -31,6 +32,11 @@ builder.Services
 
 builder.Services
     .AddMudServices()
+    .AddBlazorise(options =>
+    {
+        options.Immediate = true;
+    })
+    .AddEmptyProviders()
     .AddBlazoredLocalStorage()
     .AddScoped<IUserPreferencesService, UserPreferencesService>()
     .AddScoped<LayoutService>();

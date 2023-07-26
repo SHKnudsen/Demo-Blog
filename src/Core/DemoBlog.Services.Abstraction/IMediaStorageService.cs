@@ -9,4 +9,6 @@ public interface IMediaStorageService
     public Task<Uri> UploadMediaAsync(string blobName, string filePath);
 
     public Task<Stream> GetMediaStream(string blobName);
+
+    public Task<Uri?> GetSASBlobUrl(string blobName);
 }

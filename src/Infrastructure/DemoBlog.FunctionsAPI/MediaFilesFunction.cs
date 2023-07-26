@@ -1,7 +1,10 @@
+using System;
+using System.Net.Http;
+using Azure.Storage.Blobs;
 using DemoBlog.Services.Abstraction;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using HttpMultipartParser;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
 namespace DemoBlog.MediaFilesAPI
@@ -21,41 +24,57 @@ namespace DemoBlog.MediaFilesAPI
         }
 
         [Function(nameof(UploadMediaStream))]
-        public async Task<IActionResult> UploadMediaStream(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = ROUTE_PREFIX)] HttpRequest req)
+        public async Task<HttpResponseData> UploadMediaStream(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = ROUTE_PREFIX)] HttpRequestData req)
         {
-            var form = await req.ReadFormAsync();
+            var parser = await MultipartFormDataParser.ParseAsync(req.Body);
 
-            // Get the string parameter
-            var blobName = form["blobName"];
+            if(!parser.HasParameter("blobName"))
+                throw new Exception();
 
-            // Get the stream parameter
-            var streamParam = form.Files.GetFile("mediaFileStream");
-            var stream = streamParam.OpenReadStream();
+            var blobName = parser.GetParameterValue("blobName");
+            var filePart = parser.Files.FirstOrDefault(x => x.Name == "mediaFileStream") ?? throw new ArgumentException();
+            var stream = filePart.Data;
 
-            var uploadUrl = await _mediaStorageService.UploadMediaStreamAsync(blobName, stream, streamParam.ContentType);
-            return new OkObjectResult(uploadUrl.ToString());
+            var uploadUrl = await _mediaStorageService.UploadMediaStreamAsync(blobName, stream, filePart.ContentType);
+            var response = req.CreateResponse(System.Net.HttpStatusCode.OK);
+            await response.WriteStringAsync(uploadUrl.ToString());
+            return response;
         }
 
         [Function(nameof(GetMedia))]
-        public async Task<IActionResult> GetMedia(
-              [HttpTrigger(AuthorizationLevel.Function, "get", Route = ROUTE_PREFIX + "/{blobName}/url")] HttpRequest req,
+        public async Task<HttpResponseData> GetMedia(
+              [HttpTrigger(AuthorizationLevel.Function, "get", Route = ROUTE_PREFIX + "/{blobName}/url")] HttpRequestData req,
               string blobName)
         {
             var url = await _mediaStorageService.GetMediaUrl(blobName);
-            return new OkObjectResult(url.ToString());
+            var response = req.CreateResponse(System.Net.HttpStatusCode.OK);
+            await response.WriteStringAsync(url.ToString());
+            return response;
         }
 
-        [Function(nameof(GetMediaStream))]
-        public async Task<IActionResult> GetMediaStream(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = ROUTE_PREFIX + "/{blobName}")] HttpRequest req,
+        [Function(nameof(GetSASUrl))]
+        public async Task<HttpResponseData> GetSASUrl(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = ROUTE_PREFIX + "/{blobName}/sas")] HttpRequestData req,
             string blobName)
         {
             blobName = Uri.UnescapeDataString(blobName);
-            var stream = await _mediaStorageService.GetMediaStream(blobName);
-            var contentType = GetContentType(blobName);
-            return new FileStreamResult(stream, contentType);
+            var sasUrl = await _mediaStorageService.GetSASBlobUrl(blobName);
+            var response = req.CreateResponse(System.Net.HttpStatusCode.OK);
+            await response.WriteStringAsync(sasUrl.ToString());
+            return response;
         }
+
+        //[Function(nameof(GetMediaStream))]
+        //public async Task<HttpResponseData> GetMediaStream(
+        //    [HttpTrigger(AuthorizationLevel.Function, "get", Route = ROUTE_PREFIX + "/{blobName}")] HttpRequestData req,
+        //    string blobName)
+        //{
+        //    blobName = Uri.UnescapeDataString(blobName);
+        //    var stream = await _mediaStorageService.GetMediaStream(blobName);
+        //    var contentType = GetContentType(blobName);
+        //    return new FileStreamResult(stream, contentType);
+        //}
 
         private static string GetContentType(string blobName)
         {

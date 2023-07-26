@@ -1,5 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
+using Azure.Storage.Sas;
 using DemoBlog.Services.Abstraction;
 using DemoBlog.Services.Abstraction.Configuration;
 
@@ -42,6 +44,30 @@ namespace DemoBlog.Services
             await blobClient.UploadAsync(mediaStream);
             await blobClient.SetHttpHeadersAsync(new BlobHttpHeaders { ContentType = mimeType });
             return blobClient.Uri;
+        }
+
+        public async Task<Uri?> GetSASBlobUrl(string blobName)
+        {
+            var blobClient = _containerClient.GetBlobClient(blobName);
+            if (blobClient.CanGenerateSasUri)
+            {
+                // Create a SAS token that's valid for one day
+                BlobSasBuilder sasBuilder = new BlobSasBuilder()
+                {
+                    BlobContainerName = blobClient.GetParentBlobContainerClient().Name,
+                    BlobName = blobClient.Name,
+                    Resource = "b"
+                };
+
+                sasBuilder.ExpiresOn = DateTimeOffset.UtcNow.AddDays(1);
+                sasBuilder.SetPermissions(BlobContainerSasPermissions.Read);
+
+                Uri sasURI = blobClient.GenerateSasUri(sasBuilder);
+
+                return sasURI;
+            }
+
+            return null;
         }
     }
 }

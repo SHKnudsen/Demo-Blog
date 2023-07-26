@@ -35,5 +35,11 @@ namespace DemoBlog.BlazorClient.Services.HttpClients
         {
             await _httpClient.DeleteAsync(ROUTE_PREFIX + $"/{id}");
         }
+
+        public async Task PublishPostAsync(BlogPost blogPost)
+        {
+            blogPost.Published = DateTime.UtcNow;
+            await _httpClient.PutAsJsonAsync<BlogPost>(ROUTE_PREFIX, blogPost);
+        }
     }
 }
